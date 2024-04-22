@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meal Plan and YouTube Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        #responseContainer, #youtubeResults {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Generated Meal Plan</h1>
+    <div id="responseContainer"></div>
+    <h2>Related YouTube Videos</h2>
+    <div id="youtubeResults"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function getMealPlan() {
+            try {
+                const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+                    model: "gpt-4",
+                    messages: [
+                        {
+                            "role": "system",
+                            "content": "You find the best meal plan for users with this information that they will provide for you in this format.\nCurrent Weight (lbs):\nWeight Goal (lbs):\nPreferred Rate of Weight Loss (lbs/week):\nAge:\nHeight (inches):\nDietary Restrictions:\nJust come up with a meal plan for breakfast, lunch, and dinner. Just one meal for each. No recipe just the name of the meal. Do not give the disclaimer at the end. No disclaimer at the end. NO DISCLAIMER AT THE END OF THE RECIPES. After the dinner meal do not write anything else. STOP WRITING THE DISCLAIMER AT THE END. It should be (Breakfast:),(Lunch:),(Dinner:)"
+                        },
+                        {
+                            "role": "user",
+                            "content": "Current Weight (lbs): 220\nWeight Goal (lbs): 190\nPreferred Rate of Weight Loss (lbs/week): 2\nAge: 23\nHeight (inches): 72\nDietary Restrictions: Nut Allergy"
+                        }
+                    ]
+                }, {
+                    headers: {
+                        'Authorization': `Bearer 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`, 
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const planText = response.data.choices[0].message.content;
+                document.getElementById('responseContainer').innerText = planText;
+                extractMealsAndSearch(planText);
+            } catch (error) {
+                console.error('Error fetching meal plan:', error);
+                document.getElementById('responseContainer').innerText = 'Failed to fetch meal plan.';
+            }
+        }
+        function extractMealsAndSearch(planText) {
+            const breakfastMatch = planText.match(/Breakfast: (.+?)\n/);
+            if (breakfastMatch) {
+                searchYouTube(breakfastMatch[1].trim());
+            }
+            const lunchMatch = planText.match(/Lunch: (.+?)\n/);
+            if (lunchMatch) {
+                searchYouTube(lunchMatch[1].trim());
+            }
+            const dinnerMatch = planText.match(/Dinner: (.+?)\n?$/);
+            if (dinnerMatch) {
+                searchYouTube(dinnerMatch[1].trim());
+            }
+        }
+
+        async function searchYouTube(query) {
+            try {
+                const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+                    params: {
+                        part: 'snippet',
+                        q: query + " recipe",
+                        type: 'video',
+                        maxResults: 1,
+                        key: 'AIzaSyA3Zh2QmXy5KjV4UeEuJmn2ps3UkORrjPo'
+                    }
+                });
+                const videos = response.data.items;
+                const resultsDiv = document.getElementById('youtubeResults');
+                if (videos.length > 0) {
+                    videos.forEach(video => {
+                        const videoUrl = `https://www.youtube.com/watch?v=${video.id.videoId}`;
+                        const videoTitle = video.snippet.title;
+                        const content = document.createElement('p');
+                        content.innerHTML = `Title: ${videoTitle}, URL: <a href="${videoUrl}" target="_blank">${videoUrl}</a>`;
+                        resultsDiv.appendChild(content);
+                    });
+                } else {
+                    resultsDiv.innerHTML += `<p>No videos found for ${query}.</p>`;
+                }
+            } catch (error) {
+                console.error('YouTube Search Error:', error);
+                document.getElementById('youtubeResults').innerHTML = `<p>Failed to fetch videos for ${query} due to an error.</p>`;
+            }
+        }
+
+        getMealPlan();
+    </script>
+</body>
+</html>

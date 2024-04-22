@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" />
+  <title>Customize</title>
+</head>
+<body>
+  <nav>
+    <div class="nav__logo">
+      <a href="index.html"><img src="assets/logo.png" alt="logo" /></a>
+    </div>
+    <ul class="nav__links">
+      <li class="link"><a href="index.html">Home</a></li>
+      <li class="link"><a href="meals.html">Meals</a></li>
+      <li class="link"><a href="workouts.html">Workouts</a></li>
+      <li class="link"><a href="#">Customize</a></li>
+      <li class="link"><a href="settings.html">Settings</a></li>
+    </ul>
+    <button class="btn">Sign In</button>
+  </nav>
+  
+  <section class="section__container">
+    <div class="content-container">
+      <h2>Edit Meals Page Content:</h2>
+      <textarea id="meals-content"></textarea>
+      <button class="save-button" onclick="saveMealsContent()">Save Meals Content</button>
+
+      <h2>Edit Workouts Page Content:</h2>
+      <textarea id="workouts-content"></textarea>
+      <button class="save-button" onclick="saveWorkoutsContent()">Save Workouts Content</button>
+    </div>
+  </section>
+
+  <script>
+    // Load default content for meals and workouts pages
+    window.onload = function() {
+      document.getElementById('meals-content').value = `<!-- Paste your customized HTML content for the meals page here -->`;
+      document.getElementById('workouts-content').value = `<!-- Paste your customized HTML content for the workouts page here -->`;
+    }
+
+    // Function to save customized content for meals page
+    function saveMealsContent() {
+      var mealsContent = document.getElementById('meals-content').value;
+      localStorage.setItem('mealsContent', mealsContent);
+      alert('Meals content saved successfully!');
+    }
+
+    // Function to save customized content for workouts page
+    function saveWorkoutsContent() {
+      var workoutsContent = document.getElementById('workouts-content').value;
+      localStorage.setItem('workoutsContent', workoutsContent);
+      alert('Workouts content saved successfully!');
+    }
+  </script>
+</body>
+</html>

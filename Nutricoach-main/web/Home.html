@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Home | Fitclub</title>
+</head>
+<body>
+  <nav>
+    <div class="nav__logo">
+      <a href="#"><img src="assets/logo.png" alt="logo" /></a>
+    </div>
+    <ul class="nav__links">
+      <li class="link active"><a href="#">Home</a></li>
+      <li class="link"><a href="meals.html">Meals</a></li>
+      <li class="link"><a href="workouts.html">Workouts</a></li>
+      <li class="link"><a href="customized.html">Customize</a></li>
+      <li class="link"><a href="settings.html">Settings</a></li>
+    </ul>
+    <button class="btn">Sign In</button>
+  </nav>
+
+  <section class="section__container" style="display: flex; align-items: flex-start;">
+    <div class="input__container" style="flex-grow: 1; max-width: 50%;">
+      <input type="number" id="protein" placeholder="Protein (g)">
+      <input type="number" id="carbs" placeholder="Carbs (g)">
+      <input type="number" id="fiber" placeholder="Fiber (g)">
+      <input type="number" id="fats" placeholder="Fats (g)">
+      <button class="btn" onclick="updateChart()">Update Chart</button>
+    </div>
+    <div class="chart__container" style="flex-grow: 1; max-width: 50%;">
+      <canvas id="nutritionalChart" style="width:100%; max-width:300px;"></canvas>
+    </div>
+  </section>
+
+  <script>
+    const ctx = document.getElementById('nutritionalChart').getContext('2d');
+    let nutritionalChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Protein', 'Carbs', 'Fiber', 'Fats'],
+        datasets: [{
+          label: 'Nutrition',
+          data: [0, 0, 0, 0], // Default values
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            display: false
+          }
+        }
+      }
+    });
+
+    function updateChart() {
+      nutritionalChart.data.datasets[0].data = [
+        document.getElementById('protein').value,
+        document.getElementById('carbs').value,
+        document.getElementById('fiber').value,
+        document.getElementById('fats').value
+      ];
+      nutritionalChart.update();
+    }
+  </script>
+</body>
+</html>

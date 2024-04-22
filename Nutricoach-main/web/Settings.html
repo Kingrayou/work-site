@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" />
+  <title>Settings | Fitclub</title>
+</head>
+<body>
+  <nav>
+    <div class="nav__logo">
+      <a href="index.html"><img src="assets/logo.png" alt="logo" /></a>
+    </div>
+    <ul class="nav__links">
+      <li class="link"><a href="index.html">Home</a></li>
+      <li class="link"><a href="meals.html">Meals</a></li>
+      <li class="link"><a href="workouts.html">Workouts</a></li>
+      <li class="link"><a href="customized.html">Customize</a></li>
+      <li class="link active"><a href="#">Settings</a></li>
+    </ul>
+    <button class="btn">Sign In</button>
+  </nav>
+
+  <section class="section__container">
+    <div class="settings__container">
+      <h2 class="section__header">Account Settings</h2>
+      <form class="settings__form">
+        <div class="form__group">
+          <label for="email">Email Address:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form__group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form__group">
+          <button type="submit" class="btn">Update Settings</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Placeholder for form submission logic
+    document.querySelector('.settings__form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Implement update logic here
+      alert('Settings updated successfully!');
+    });
+  </script>
+</body>
+</html>
